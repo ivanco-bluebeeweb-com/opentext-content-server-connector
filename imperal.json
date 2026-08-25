@@ -1,0 +1,3791 @@
+{
+  "manifest_schema_version": 3,
+  "sdk_version": "5.11.0",
+  "app_id": "opentext-content-server-connector",
+  "version": "0.1.0",
+  "name": "OpenText Content Server",
+  "description": "Connect your own OpenText Content Server (OTCS) instance to browse and manage Nodes (folders/documents), Versions, Permissions, Members, Categories (metadata), and run a content-health audit.",
+  "icon": "icon.svg",
+  "actions_explicit": true,
+  "system": false,
+  "capabilities": [
+    "content-server:read",
+    "content-server:write"
+  ],
+  "tools": [
+    {
+      "name": "connect_content_server",
+      "description": "Connect your own OpenText Content Server instance with its base URL, username, and password.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "label": {
+            "default": "",
+            "description": "Friendly instance label, e.g. 'Acme Content Server'.",
+            "title": "Label",
+            "type": "string"
+          },
+          "base_url": {
+            "description": "Content Server base URL, e.g. 'https://otcs.acme.com/otcs/cs.exe'.",
+            "title": "Base Url",
+            "type": "string"
+          },
+          "username": {
+            "description": "Content Server username with REST API access.",
+            "title": "Username",
+            "type": "string"
+          },
+          "password": {
+            "description": "Content Server password for that username.",
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "base_url",
+          "username",
+          "password"
+        ],
+        "title": "ConnectContentServerParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connection_id": {
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "base_url": {
+            "title": "Base Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "connection_id",
+          "label",
+          "base_url"
+        ],
+        "title": "ContentServerConnection",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.connect_content_server",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "disconnect_content_server",
+      "description": "Disconnect a saved Content Server instance and delete its stored credentials.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "description": "Saved Content Server connection ID to remove from Imperal.",
+            "title": "Connection Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "connection_id"
+        ],
+        "title": "DisconnectContentServerParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {},
+        "title": "NoParams",
+        "type": "object"
+      },
+      "event": "content-server-connector.disconnect_content_server",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "list_connections",
+      "description": "List the connected OpenText Content Server instances.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {},
+        "title": "NoParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerConnection": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "connection_id": {
+                "title": "Connection Id",
+                "type": "string"
+              },
+              "label": {
+                "title": "Label",
+                "type": "string"
+              },
+              "base_url": {
+                "title": "Base Url",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "connection_id",
+              "label",
+              "base_url"
+            ],
+            "title": "ContentServerConnection",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "connections": {
+            "items": {
+              "$ref": "#/$defs/ContentServerConnection"
+            },
+            "title": "Connections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "connections"
+        ],
+        "title": "ConnectionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.list_connections",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "audit_content_health",
+      "description": "Scan a folder tree and flag content-health issues: empty documents, nodes with no categories, and very large files.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Node ID to audit. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "AuditContentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentAuditFinding": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "finding_type": {
+                "title": "Finding Type",
+                "type": "string"
+              },
+              "item_name": {
+                "title": "Item Name",
+                "type": "string"
+              },
+              "detail": {
+                "title": "Detail",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "finding_type",
+              "item_name",
+              "detail"
+            ],
+            "title": "ContentAuditFinding",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/$defs/ContentAuditFinding"
+            },
+            "title": "Findings",
+            "type": "array"
+          },
+          "nodes_scanned": {
+            "default": 0,
+            "title": "Nodes Scanned",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "node_id",
+          "findings"
+        ],
+        "title": "ContentAudit",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.audit_content_health",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "list_categories",
+      "description": "List metadata categories (templates) attached to a node.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "ListCategoriesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerCategory": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "category_id": {
+                "title": "Category Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "category_id",
+              "name"
+            ],
+            "title": "ContentServerCategory",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "categories": {
+            "items": {
+              "$ref": "#/$defs/ContentServerCategory"
+            },
+            "title": "Categories",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "categories"
+        ],
+        "title": "CategoryList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.list_categories",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "get_category_values",
+      "description": "Read a metadata category's current attribute values on a node.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "category_id": {
+            "description": "Category (metadata template) ID, from list_categories.",
+            "title": "Category Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category_id"
+        ],
+        "title": "GetCategoryParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "category_id": {
+            "title": "Category Id",
+            "type": "string"
+          },
+          "values": {
+            "additionalProperties": true,
+            "title": "Values",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "category_id",
+          "values"
+        ],
+        "title": "CategoryValues",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.get_category_values",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "set_category_values",
+      "description": "Set metadata category attribute values on a node.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "category_id": {
+            "description": "Category (metadata template) ID, from list_categories.",
+            "title": "Category Id",
+            "type": "string"
+          },
+          "values_json": {
+            "description": "JSON object of attribute-name to value pairs matching the category's schema, e.g. '{\"Status\": \"Approved\"}'.",
+            "title": "Values Json",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category_id",
+          "values_json"
+        ],
+        "title": "SetCategoryValuesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "category_id": {
+            "title": "Category Id",
+            "type": "string"
+          },
+          "values": {
+            "additionalProperties": true,
+            "title": "Values",
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "category_id",
+          "values"
+        ],
+        "title": "CategoryValues",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.set_category_values",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "get_node",
+      "description": "Read one Content Server node's (folder or document) metadata in full.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "NodeIdParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "node_type": {
+            "default": "",
+            "title": "Node Type",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "modify_date": {
+            "default": "",
+            "title": "Modify Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "node_id",
+          "name"
+        ],
+        "title": "ContentServerNode",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.get_node",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "list_node_children",
+      "description": "List files and subfolders directly inside a Content Server node (folder).",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "limit": {
+            "default": 100,
+            "description": "Max child nodes to return (1-500).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListNodeChildrenParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerNode": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "node_id": {
+                "title": "Node Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "node_type": {
+                "default": "",
+                "title": "Node Type",
+                "type": "string"
+              },
+              "parent_id": {
+                "default": "",
+                "title": "Parent Id",
+                "type": "string"
+              },
+              "size_bytes": {
+                "default": 0,
+                "title": "Size Bytes",
+                "type": "integer"
+              },
+              "modify_date": {
+                "default": "",
+                "title": "Modify Date",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "node_id",
+              "name"
+            ],
+            "title": "ContentServerNode",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/$defs/ContentServerNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "nodes"
+        ],
+        "title": "NodeList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.list_node_children",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "create_folder",
+      "description": "Create a new folder inside a parent node.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "New folder name, e.g. 'Q3 Contracts'.",
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "2000",
+            "description": "Parent node ID to create the folder inside. Use '2000' for root.",
+            "title": "Parent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CreateFolderParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "node_type": {
+            "default": "",
+            "title": "Node Type",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "modify_date": {
+            "default": "",
+            "title": "Modify Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "node_id",
+          "name"
+        ],
+        "title": "ContentServerNode",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.create_folder",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "rename_or_move_node",
+      "description": "Rename a node and/or move it to a different parent folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "name": {
+            "default": "",
+            "description": "New node name. Leave blank to keep the current name.",
+            "title": "Name",
+            "type": "string"
+          },
+          "new_parent_id": {
+            "default": "",
+            "description": "Destination parent node ID to move into. Leave blank to keep in place.",
+            "title": "New Parent Id",
+            "type": "string"
+          }
+        },
+        "title": "RenameOrMoveNodeParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "node_type": {
+            "default": "",
+            "title": "Node Type",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "modify_date": {
+            "default": "",
+            "title": "Modify Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "node_id",
+          "name"
+        ],
+        "title": "ContentServerNode",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.rename_or_move_node",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "delete_node",
+      "description": "Permanently delete a node (folder or document). Cannot be undone.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "DeleteNodeParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.delete_node",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "download_document",
+      "description": "Download a document's content, base64-encoded.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "DownloadDocumentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "content_base64": {
+            "title": "Content Base64",
+            "type": "string"
+          },
+          "content_type": {
+            "default": "application/octet-stream",
+            "title": "Content Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "name",
+          "content_base64"
+        ],
+        "title": "DownloadResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.download_document",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "upload_document",
+      "description": "Upload a new document (base64-encoded content) into a folder.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "parent_id": {
+            "default": "2000",
+            "description": "Folder node ID to upload into. Use '2000' for root.",
+            "title": "Parent Id",
+            "type": "string"
+          },
+          "name": {
+            "description": "Document name to save as, e.g. 'contract.pdf'.",
+            "title": "Name",
+            "type": "string"
+          },
+          "content_base64": {
+            "description": "Base64-encoded file content.",
+            "title": "Content Base64",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "content_base64"
+        ],
+        "title": "UploadDocumentParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "node_id",
+          "name"
+        ],
+        "title": "UploadResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.upload_document",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "upload_document_version",
+      "description": "Upload a new version of an existing document.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "filename": {
+            "default": "",
+            "description": "Optional filename for this new version. Leave blank to keep the document's current name.",
+            "title": "Filename",
+            "type": "string"
+          },
+          "content_base64": {
+            "description": "Base64-encoded new version content.",
+            "title": "Content Base64",
+            "type": "string"
+          }
+        },
+        "required": [
+          "content_base64"
+        ],
+        "title": "UploadVersionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "node_id": {
+            "title": "Node Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "node_id",
+          "name"
+        ],
+        "title": "UploadResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.upload_document_version",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "search_nodes",
+      "description": "Search for nodes (folders and documents) by free-text query.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "query": {
+            "description": "Free-text search query, e.g. 'quarterly report'.",
+            "title": "Query",
+            "type": "string"
+          },
+          "limit": {
+            "default": 30,
+            "description": "Max results to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "SearchNodesParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerNode": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "node_id": {
+                "title": "Node Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "node_type": {
+                "default": "",
+                "title": "Node Type",
+                "type": "string"
+              },
+              "parent_id": {
+                "default": "",
+                "title": "Parent Id",
+                "type": "string"
+              },
+              "size_bytes": {
+                "default": 0,
+                "title": "Size Bytes",
+                "type": "integer"
+              },
+              "modify_date": {
+                "default": "",
+                "title": "Modify Date",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "node_id",
+              "name"
+            ],
+            "title": "ContentServerNode",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/$defs/ContentServerNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "nodes"
+        ],
+        "title": "NodeList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.search_nodes",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "list_permissions",
+      "description": "List the permission grants (who can see/modify/delete) on a node.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "ListPermissionsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerPermission": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "member_id": {
+                "title": "Member Id",
+                "type": "string"
+              },
+              "member_name": {
+                "default": "",
+                "title": "Member Name",
+                "type": "string"
+              },
+              "member_type": {
+                "default": "",
+                "title": "Member Type",
+                "type": "string"
+              },
+              "permissions": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Permissions",
+                "type": "array"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "member_id",
+              "permissions"
+            ],
+            "title": "ContentServerPermission",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "permissions": {
+            "items": {
+              "$ref": "#/$defs/ContentServerPermission"
+            },
+            "title": "Permissions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "permissions"
+        ],
+        "title": "PermissionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.list_permissions",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "grant_permission",
+      "description": "Grant a user or group a set of permissions on a node.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "member_id": {
+            "description": "User or group ID to grant access to, from list_members.",
+            "title": "Member Id",
+            "type": "string"
+          },
+          "permissions": {
+            "description": "Permission flags to grant, e.g. ['see', 'see_contents', 'modify', 'delete'].",
+            "items": {
+              "type": "string"
+            },
+            "title": "Permissions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "member_id"
+        ],
+        "title": "GrantPermissionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "member_id": {
+            "title": "Member Id",
+            "type": "string"
+          },
+          "member_name": {
+            "default": "",
+            "title": "Member Name",
+            "type": "string"
+          },
+          "member_type": {
+            "default": "",
+            "title": "Member Type",
+            "type": "string"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Permissions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "member_id",
+          "permissions"
+        ],
+        "title": "ContentServerPermission",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.grant_permission",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "revoke_permission",
+      "description": "Revoke a member's custom permissions on a node.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "member_id": {
+            "description": "User or group ID to revoke access from.",
+            "title": "Member Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "member_id"
+        ],
+        "title": "RevokePermissionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.revoke_permission",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "list_members",
+      "description": "List users and groups (members) on the connected Content Server instance, optionally filtered by name.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "query": {
+            "default": "",
+            "description": "Optional name filter, e.g. 'jane'.",
+            "title": "Query",
+            "type": "string"
+          },
+          "limit": {
+            "default": 50,
+            "description": "Max members to return (1-200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "title": "ListMembersParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerMember": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "member_id": {
+                "title": "Member Id",
+                "type": "string"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "member_type": {
+                "default": "",
+                "title": "Member Type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "member_id",
+              "name"
+            ],
+            "title": "ContentServerMember",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/$defs/ContentServerMember"
+            },
+            "title": "Members",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "members"
+        ],
+        "title": "MemberList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.list_members",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "list_versions",
+      "description": "List the saved versions of a document.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          }
+        },
+        "title": "ListVersionsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "ContentServerVersion": {
+            "properties": {
+              "id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "title": "Id"
+              },
+              "title": {
+                "title": "Title",
+                "type": "string"
+              },
+              "kind": {
+                "default": "",
+                "title": "Kind",
+                "type": "string"
+              },
+              "subtitle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Subtitle"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Description"
+              },
+              "status": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Status"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "version_number": {
+                "title": "Version Number",
+                "type": "integer"
+              },
+              "size_bytes": {
+                "default": 0,
+                "title": "Size Bytes",
+                "type": "integer"
+              },
+              "modify_date": {
+                "default": "",
+                "title": "Modify Date",
+                "type": "string"
+              },
+              "modified_by": {
+                "default": "",
+                "title": "Modified By",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "version_number"
+            ],
+            "title": "ContentServerVersion",
+            "type": "object",
+            "x-sdl": "entity"
+          }
+        },
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/$defs/ContentServerVersion"
+            },
+            "title": "Versions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "versions"
+        ],
+        "title": "VersionList",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.list_versions",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "promote_version",
+      "description": "Promote a previous document version to be the current version.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "version_number": {
+            "description": "Version number to promote to current, from list_versions.",
+            "title": "Version Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version_number"
+        ],
+        "title": "PromoteVersionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "version_number": {
+            "title": "Version Number",
+            "type": "integer"
+          },
+          "size_bytes": {
+            "default": 0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "modify_date": {
+            "default": "",
+            "title": "Modify Date",
+            "type": "string"
+          },
+          "modified_by": {
+            "default": "",
+            "title": "Modified By",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "version_number"
+        ],
+        "title": "ContentServerVersion",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.promote_version",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    },
+    {
+      "name": "delete_version",
+      "description": "Permanently delete a document version. Cannot be undone.",
+      "action_type": "write",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "properties": {
+          "connection_id": {
+            "default": "",
+            "description": "Optional saved Content Server connection ID. Omit to use the first connected instance.",
+            "title": "Connection Id",
+            "type": "string"
+          },
+          "node_id": {
+            "default": "2000",
+            "description": "Content Server node ID. Use '2000' for the Enterprise Workspace root.",
+            "title": "Node Id",
+            "type": "string"
+          },
+          "version_number": {
+            "description": "Version number to delete, from list_versions.",
+            "title": "Version Number",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version_number"
+        ],
+        "title": "DeleteVersionParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "deleted": {
+            "title": "Deleted",
+            "type": "boolean"
+          },
+          "item_id": {
+            "default": "",
+            "title": "Item Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "deleted"
+        ],
+        "title": "DeleteResult",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "content-server-connector.delete_version",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "content_server"
+    }
+  ],
+  "signals": [],
+  "schedules": [],
+  "required_scopes": [],
+  "icon_size_bytes": 299,
+  "lifecycle": {
+    "health_check": {
+      "interval_sec": 60
+    }
+  },
+  "secrets": [
+    {
+      "name": "content_server_connections",
+      "description": "JSON list of connected Content Server instances and their username/password (needed to silently re-authenticate expired session tickets). Managed only through connect_content_server and disconnect_content_server.",
+      "required": true,
+      "write_mode": "both",
+      "max_bytes": 65536,
+      "scope": "user",
+      "rotation_hint_days": 90
+    }
+  ],
+  "panels": [
+    {
+      "panel_id": "secrets",
+      "slot": "right",
+      "title": "Secrets",
+      "tree": {},
+      "icon": "KeyRound",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "content_server_sidebar",
+      "slot": "left",
+      "title": "OpenText Content Server",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "content_server_connect_help",
+      "slot": "overlay",
+      "title": "Как подключить Content Server",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": false
+    },
+    {
+      "panel_id": "content_server_browse",
+      "slot": "center",
+      "title": "Browse",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "content_server_audit",
+      "slot": "center",
+      "title": "Content audit",
+      "tree": {},
+      "icon": "",
+      "refresh": "manual",
+      "center_overlay": true
+    },
+    {
+      "panel_id": "content_server_settings",
+      "slot": "center",
+      "title": "Content Server settings",
+      "tree": {},
+      "icon": "Settings",
+      "refresh": "manual",
+      "center_overlay": true
+    }
+  ]
+}
