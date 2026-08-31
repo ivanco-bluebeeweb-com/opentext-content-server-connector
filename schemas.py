@@ -115,21 +115,29 @@ class AuditContentParams(ConnectionRefParams):
 # ---- SDL result entities ----
 
 class DeleteResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     deleted: bool
     item_id: str = ""
 
 
 class ContentServerConnection(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connection_id: str
     label: str
     base_url: str
 
 
 class ConnectionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     connections: list[ContentServerConnection]
 
 
 class ContentServerNode(sdl.Entity):
+    id: str = ""
+    title: str = ""
     node_id: str
     name: str
     node_type: str = ""
@@ -139,21 +147,29 @@ class ContentServerNode(sdl.Entity):
 
 
 class NodeList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     nodes: list[ContentServerNode]
 
 
 class UploadResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     node_id: str
     name: str
 
 
 class DownloadResult(sdl.Entity):
+    id: str = ""
+    title: str = ""
     name: str
     content_base64: str
     content_type: str = "application/octet-stream"
 
 
 class ContentServerVersion(sdl.Entity):
+    id: str = ""
+    title: str = ""
     version_number: int
     size_bytes: int = 0
     modify_date: str = ""
@@ -161,10 +177,14 @@ class ContentServerVersion(sdl.Entity):
 
 
 class VersionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     versions: list[ContentServerVersion]
 
 
 class ContentServerPermission(sdl.Entity):
+    id: str = ""
+    title: str = ""
     member_id: str
     member_name: str = ""
     member_type: str = ""
@@ -172,40 +192,56 @@ class ContentServerPermission(sdl.Entity):
 
 
 class PermissionList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     permissions: list[ContentServerPermission]
 
 
 class ContentServerMember(sdl.Entity):
+    id: str = ""
+    title: str = ""
     member_id: str
     name: str
     member_type: str = ""
 
 
 class MemberList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     members: list[ContentServerMember]
 
 
 class ContentServerCategory(sdl.Entity):
+    id: str = ""
+    title: str = ""
     category_id: str
     name: str
 
 
 class CategoryList(sdl.Entity):
+    id: str = ""
+    title: str = ""
     categories: list[ContentServerCategory]
 
 
 class CategoryValues(sdl.Entity):
+    id: str = ""
+    title: str = ""
     category_id: str
     values: dict
 
 
 class ContentAuditFinding(sdl.Entity):
+    id: str = ""
+    title: str = ""
     finding_type: str
     item_name: str
     detail: str
 
 
 class ContentAudit(sdl.Entity):
+    id: str = ""
+    title: str = ""
     node_id: str
     findings: list[ContentAuditFinding]
     nodes_scanned: int = 0
