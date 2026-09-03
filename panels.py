@@ -23,8 +23,7 @@ def _field(label: str, node: ui.UINode) -> ui.UINode:
 
 def _settings_button() -> ui.UINode:
     return ui.Button(
-        "App settings", variant="secondary", size="sm", full_width=True,
-        icon="Settings", on_click=ui.Call("__panel__content_server_settings"),
+        "App settings", variant="secondary", size="sm", icon="Settings", on_click=ui.Call("__panel__content_server_settings"),
     )
 
 
@@ -35,6 +34,9 @@ async def content_server_sidebar(ctx, **kwargs) -> ui.UINode:
         return ui.Stack(direction="v", gap=3, align="stretch", children=[
             ui.Button("Как подключить?", variant="ghost", size="sm", icon="HelpCircle",
                       on_click=ui.Call("__panel__content_server_connect_help")),
+            ui.Button("Sign in with OpenText (SSO / OTDS)", variant="primary", size="sm", icon="login"),
+            ui.Divider(),
+            ui.Text("Or connect via Content Server Login", variant="caption"),
             ui.Form(action="connect_content_server", submit_label="Подключить", children=[
                 ui.Stack(direction="v", gap=3, align="stretch", children=[
                     _field("Название (необязательно)", ui.Input(param_name="label", placeholder="например, Acme Content Server")),
@@ -50,9 +52,9 @@ async def content_server_sidebar(ctx, **kwargs) -> ui.UINode:
             ui.Text(c.get("label") or c.get("base_url", ""), variant="body"),
             ui.Text(c.get("base_url", ""), variant="caption"),
         ]),
-        ui.Button("Обзор контента", variant="secondary", size="sm", full_width=True, icon="Folder",
+        ui.Button("Обзор контента", variant="secondary", size="sm", icon="Folder",
                   on_click=ui.Call("__panel__content_server_browse")),
-        ui.Button("Аудит контента", variant="secondary", size="sm", full_width=True, icon="ShieldCheck",
+        ui.Button("Аудит контента", variant="secondary", size="sm", icon="ShieldCheck",
                   on_click=ui.Call("__panel__content_server_audit")),
         _settings_button(),
     ])
