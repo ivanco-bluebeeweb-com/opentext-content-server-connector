@@ -3787,5 +3787,41 @@
       "refresh": "manual",
       "center_overlay": true
     }
-  ]
+  ],
+  "pricing": {
+    "model": "per_action",
+    "currency": "credits",
+    "monthly_price": 0,
+    "free_tools": [
+      "connect_content_server",
+      "disconnect_content_server",
+      "list_connections"
+    ],
+    "tool_prices": {
+      "connect_content_server": 0,
+      "disconnect_content_server": 0,
+      "list_connections": 0,
+      "audit_content_health": 20,
+      "list_categories": 8,
+      "get_category_values": 8,
+      "set_category_values": 16,
+      "get_node": 8,
+      "list_node_children": 8,
+      "create_folder": 16,
+      "rename_or_move_node": 16,
+      "delete_node": 16,
+      "download_document": 16,
+      "upload_document": 16,
+      "upload_document_version": 16,
+      "search_nodes": 8,
+      "list_permissions": 8,
+      "grant_permission": 16,
+      "revoke_permission": 16,
+      "list_members": 8,
+      "list_versions": 8,
+      "promote_version": 16,
+      "delete_version": 16
+    },
+    "notes": "Standard platform scale {0, 8, 16, 20, 40}. 0 = access setup and harmless discovery. 8 = read/list/search. 16 = standard single mutation/CRUD. 20 = bulk or heavy audit operation."
+  }
 }
